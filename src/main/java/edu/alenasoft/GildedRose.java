@@ -5,7 +5,7 @@ import java.util.List;
 
 public class GildedRose {
 
-  public static List<Item> items = null;
+  public static List<Item> items = new ArrayList<>();
 
   public static void main(String[] args) {
 
