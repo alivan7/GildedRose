@@ -17,39 +17,28 @@ public class GildedRose {
     items.add(new Item("Sulfuras, Hand of Ragnaros", 0, 80));
     items.add(new Item("Backstage passes to a TAFKAL80ETC concert", 15, 20));
     items.add(new Item("Conjured Mana Cake", 3, 6));
-
     updateQuality();
-
     System.out.println(items);
   }
-
   public static void updateQuality() {
-    for (int i = 0; i < items.size(); i++) {
-      if ((!"Aged Brie".equals(items.get(i).getName()))
-          && !"Backstage passes to a TAFKAL80ETC concert".equals(items.get(i).getName())) {
-        if (items.get(i).getQuality() > 0) {
-          if (!"Sulfuras, Hand of Ragnaros".equals(items.get(i).getName())) {
-            items.get(i).setQuality(items.get(i).getQuality() - 1);
-          }
-        }
-      } else {
-        if (items.get(i).getQuality() < 50) {
-          items.get(i).setQuality(items.get(i).getQuality() + 1);
-        }
-      }
-
-      if (!"Sulfuras, Hand of Ragnaros".equals(items.get(i).getName())) {
-        items.get(i).setSellIn(items.get(i).getSellIn() - 1);
-      }
-
-      if (items.get(i).getName().equals("Conjured Mana Cake")) {
-        if (items.get(i).getQuality() > 0) {
-          items.get(i).setQuality(items.get(i).getQuality() - 1);
-          if (items.get(i).getSellIn() < 0) {
-            items.get(i).setQuality(items.get(i).getQuality() - 1);
-          }
-        }
-      }
+    for (Item item : items) {
+      ItemUpdater updater = getUpdater(item);
+      updater.update();
     }
   }
+  private static ItemUpdater getUpdater(Item item) {
+    switch (item.getName()) {
+      case "Aged Brie":
+        return new AgedBrieUpdater(item);
+      case "Sulfuras, Hand of Ragnaros":
+        return new SulfurasUpdater(item);
+      case "Backstage passes to a TAFKAL80ETC concert":
+        return new BackstagePassUpdater(item);
+      case "Conjured Mana Cake":
+        return new ConjuredUpdater(item);
+      default:
+        return new NormalItemUpdater(item);
+    }
+  }
+
 }
